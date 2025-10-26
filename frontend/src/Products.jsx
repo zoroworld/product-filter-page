@@ -79,7 +79,6 @@ export default function Products() {
 
   return (
     <div>
-      <h2>Products</h2>
       <div className="filter-product-container">
         <div className="product-container">
           <SidebarContent products={products} />

@@ -1,7 +1,7 @@
 import React from "react";
 
 function Card({ data }) {
-  console.log(data);
+  // console.log(data);
   const { key, name, price, category, description } = data;
   return (
     <div
