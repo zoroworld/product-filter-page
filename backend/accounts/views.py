@@ -1,34 +1,58 @@
-from django.views.decorators.csrf import ensure_csrf_cookie
+from django.views.decorators.csrf import csrf_exempt
+from django.utils.decorators import method_decorator
 from django.http import JsonResponse
-from django.contrib.auth import authenticate, login, logout
-from django.contrib.auth.models import User
+from django.contrib.auth import authenticate
 from django.views import View
-import json
+from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework_simplejwt.authentication import JWTAuthentication
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.views import APIView
 
-@ensure_csrf_cookie
-def get_csrf(request):
-    return JsonResponse({"detail": "CSRF cookie set"})
 
+@method_decorator(csrf_exempt, name='dispatch')
 class LoginView(View):
     def post(self, request):
+        import json
         data = json.loads(request.body)
-        user = authenticate(
-            username=data.get("username"),
-            password=data.get("password")
-        )
 
-        if user:
-            login(request, user)
-            return JsonResponse({"message": "Login success", "username": user.username})
-        return JsonResponse({"error": "Invalid credentials"}, status=401)
+        username = data.get("username")
+        password = data.get("password")
 
-class MeView(View):
+        user = authenticate(username=username, password=password)
+
+        if user is not None:
+            # Create JWT tokens
+            refresh = RefreshToken.for_user(user)
+            return JsonResponse({
+                "message": "Login success",
+                "access": str(refresh.access_token),
+                "refresh": str(refresh),
+                "username": user.username,
+            })
+        else:
+            return JsonResponse({"error": "Invalid credentials"}, status=401)
+
+
+class MeView(APIView):
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated]
+
     def get(self, request):
-        if request.user.is_authenticated:
-            return JsonResponse({"username": request.user.username})
-        return JsonResponse({"error": "Not logged in"}, status=401)
+        return JsonResponse({
+            "username": request.user.username,
+            "email": request.user.email
+        })
 
-class LogoutView(View):
+
+class LogoutView(APIView):
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated]
+
     def post(self, request):
-        logout(request)
-        return JsonResponse({"message": "Logged out"})
+        try:
+            refresh_token = request.data.get("refresh")
+            token = RefreshToken(refresh_token)
+            token.blacklist()  # mark as invalid if blacklist enabled
+            return JsonResponse({"message": "Logout successful"})
+        except Exception:
+            return JsonResponse({"error": "Invalid token"}, status=400)

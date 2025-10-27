@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'corsheaders',
     'rest_framework',
+    'rest_framework_simplejwt',
     'app'
 ]
 
@@ -141,6 +142,13 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
+# restFrame work
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    )
+}
+
 # CORS
 
 CORS_ALLOWED_ORIGINS = [
@@ -150,24 +158,3 @@ CORS_ALLOWED_ORIGINS = [
 ]
 
 CORS_ALLOW_CREDENTIALS = True
-
-CSRF_TRUSTED_ORIGINS = [
-    "https://product-filter-page-frontend.onrender.com",
-    "https://product-filter-page.onrender.com",
-    "http://127.0.0.1:5173",
-    "http://localhost:5173"
-]
-
-# important for cookie-based session auth
-
-# Devloper
-# CSRF_COOKIE_SECURE = False  # dev only
-# SESSION_COOKIE_SECURE = False
-# CSRF_COOKIE_SAMESITE = "Lax"  # or "None" if cross-origin
-# SESSION_COOKIE_SAMESITE = "Lax"  # or "None"
-
-# In production, Render uses HTTPS, so these must be secure and SameSite=None
-CSRF_COOKIE_SECURE = True  # dev only
-SESSION_COOKIE_SECURE = True
-CSRF_COOKIE_SAMESITE = "None"  # or "None" if cross-origin
-SESSION_COOKIE_SAMESITE = "None"  # or "None"
