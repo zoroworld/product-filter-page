@@ -169,5 +169,5 @@ CSRF_TRUSTED_ORIGINS = [
 # In production, Render uses HTTPS, so these must be secure and SameSite=None
 CSRF_COOKIE_SECURE = True  # dev only
 SESSION_COOKIE_SECURE = True
-CSRF_COOKIE_SAMESITE = "Lax"  # or "None" if cross-origin
-SESSION_COOKIE_SAMESITE = "Lax"  # or "None"
+CSRF_COOKIE_SAMESITE = "None"  # or "None" if cross-origin
+SESSION_COOKIE_SAMESITE = "None"  # or "None"
