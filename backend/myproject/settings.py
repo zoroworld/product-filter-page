@@ -160,7 +160,14 @@ CSRF_TRUSTED_ORIGINS = [
 
 # important for cookie-based session auth
 
-CSRF_COOKIE_SECURE = False  # dev only
-SESSION_COOKIE_SECURE = False
+# Devloper
+# CSRF_COOKIE_SECURE = False  # dev only
+# SESSION_COOKIE_SECURE = False
+# CSRF_COOKIE_SAMESITE = "Lax"  # or "None" if cross-origin
+# SESSION_COOKIE_SAMESITE = "Lax"  # or "None"
+
+# In production, Render uses HTTPS, so these must be secure and SameSite=None
+CSRF_COOKIE_SECURE = True  # dev only
+SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SAMESITE = "Lax"  # or "None" if cross-origin
 SESSION_COOKIE_SAMESITE = "Lax"  # or "None"
