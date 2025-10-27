@@ -141,18 +141,18 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
-# CQRS
+# CORS
 
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:5173",
-    "http://127.0.0.1:5173",
+    os.getenv("FRONTEND_URL_ONE"),
+    os.getenv("FRONTEND_URL_TWO"),
 ]
 
 CORS_ALLOW_CREDENTIALS = True
 
 CSRF_TRUSTED_ORIGINS = [
-    "http://localhost:5173",
-    "http://127.0.0.1:5173",
+    os.getenv("FRONTEND_URL_ONE"),
+    os.getenv("FRONTEND_URL_TWO"),
 ]
 
 # important for cookie-based session auth
