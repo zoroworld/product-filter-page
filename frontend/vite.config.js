@@ -13,4 +13,9 @@ export default defineConfig({
     }),
     tailwindcss(),
   ],
+  server: {
+    allowedHosts: [
+      'product-filter-page-frontend.onrender.com'
+    ]
+  }
 })
